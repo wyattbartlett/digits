@@ -74,5 +74,16 @@ Template.Edit_Contact_Page.events({
       instance.messageFlags.set(displayErrorMessages, true);
     }
   },
+
+  'click .delete'(event, instance) {
+    event.preventDefault();
+    // Clear out any old validation errors.
+    instance.context.resetValidation();
+    if (instance.context.isValid()) {
+      Contacts.remove(FlowRouter.getParam('_id'));
+      instance.messageFlags.set(displayErrorMessages, false);
+      FlowRouter.go('Home_Page');
+    }
+  },
 });
 
