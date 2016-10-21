@@ -17,7 +17,6 @@ Template.Edit_Contact_Page.onCreated(function onCreated() {
   this.context = ContactsSchema.namedContext('Edit_Contact_Page');
 });
 
-
 Template.Edit_Contact_Page.helpers({
   contactField(fieldName) {
     const contact = Contacts.findOne(FlowRouter.getParam('_id'));
@@ -34,19 +33,19 @@ Template.Edit_Contact_Page.helpers({
 });
 
 /* Template.Edit_Contact_Page.onRendered(function enableSemantic() {
-  const template = this;
-  template.subscribe('StudentData', () => {
-    // Use this template.subscribe callback to guarantee that the following code executes after subscriptions OK.
-    Tracker.afterFlush(() => {
-      // Use Tracker.afterFlush to guarantee that the DOM is re-rendered before calling JQuery.
-      template.$('select.ui.dropdown').dropdown();
-      template.$('.ui.selection.dropdown').dropdown();
-      template.$('select.dropdown').dropdown();
-      template.$('.ui.checkbox').checkbox();
-      template.$('.ui.radio.checkbox').checkbox();
-    });
-  });
-});*/
+ const template = this;
+ template.subscribe('StudentData', () => {
+ // Use this template.subscribe callback to guarantee that the following code executes after subscriptions OK.
+ Tracker.afterFlush(() => {
+ // Use Tracker.afterFlush to guarantee that the DOM is re-rendered before calling JQuery.
+ template.$('select.ui.dropdown').dropdown();
+ template.$('.ui.selection.dropdown').dropdown();
+ template.$('select.dropdown').dropdown();
+ template.$('.ui.checkbox').checkbox();
+ template.$('.ui.radio.checkbox').checkbox();
+ });
+ });
+ });*/
 
 Template.Edit_Contact_Page.events({
   'submit .contact-data-form'(event, instance) {
@@ -57,7 +56,6 @@ Template.Edit_Contact_Page.events({
     const address = event.target.address.value;
     const telephone = event.target.telephone.value;
     const email = event.target.email.value;
-
 
     const updatedContact = { first, last, address, telephone, email };
     // Clear out any old validation errors.
@@ -77,13 +75,14 @@ Template.Edit_Contact_Page.events({
 
   'click .delete'(event, instance) {
     event.preventDefault();
-    // Clear out any old validation errors.
-    instance.context.resetValidation();
-    if (instance.context.isValid()) {
-      Contacts.remove(FlowRouter.getParam('_id'));
-      instance.messageFlags.set(displayErrorMessages, false);
-      FlowRouter.go('Home_Page');
+    if (confirm('Do you really want to delete this entry?')) {
+      // Clear out any old validation errors.
+      instance.context.resetValidation();
+      if (instance.context.isValid()) {
+        Contacts.remove(FlowRouter.getParam('_id'));
+        instance.messageFlags.set(displayErrorMessages, false);
+        FlowRouter.go('Home_Page');
+      }
     }
   },
 });
-
